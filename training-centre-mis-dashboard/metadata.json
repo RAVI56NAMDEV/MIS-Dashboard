@@ -1,0 +1,8 @@
+{
+  "name": "MPKND Training Centre MIS Dashboard",
+  "description": "Comprehensive interactive Training Centre MIS Dashboard for monitoring student attendance, dropouts, batch performance, trainer scores, centre rankings, and placement metrics.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

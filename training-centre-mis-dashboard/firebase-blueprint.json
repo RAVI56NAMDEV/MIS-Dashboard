@@ -1,0 +1,58 @@
+{
+  "entities": {
+    "DatasetMeta": {
+      "title": "DatasetMeta",
+      "description": "Metadata for the centrally stored MIS Excel dataset",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Document identifier" },
+        "filename": { "type": "string", "maxLength": 500, "description": "Original uploaded filename" },
+        "uploadedAt": { "type": "string", "maxLength": 128, "description": "Upload timestamp in ISO format" },
+        "uploadedBy": { "type": "string", "maxLength": 256, "description": "Email of the admin who uploaded" },
+        "rowCount": { "type": "number", "description": "Total number of student data rows" },
+        "totalChunks": { "type": "number", "description": "Total number of Firestore chunk documents" },
+        "version": { "type": "number", "description": "Monotonically increasing version integer" },
+        "availableColumns": { "type": "array", "description": "List of detected Excel header columns" },
+        "mapping": { "type": "object", "description": "Column mapping dictionary" }
+      },
+      "required": ["filename", "uploadedAt", "uploadedBy", "rowCount", "totalChunks", "version"]
+    },
+    "DatasetChunk": {
+      "title": "DatasetChunk",
+      "description": "Storage chunk containing raw rows of the central MIS dataset",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Chunk identifier" },
+        "chunkIndex": { "type": "number", "description": "Zero-based index of this chunk" },
+        "version": { "type": "number", "description": "Associated dataset version" },
+        "rows": { "type": "array", "description": "List of student record objects" }
+      },
+      "required": ["chunkIndex", "version", "rows"]
+    },
+    "AdminUser": {
+      "title": "AdminUser",
+      "description": "Authorized administrator record",
+      "type": "object",
+      "properties": {
+        "email": { "type": "string", "maxLength": 256, "description": "Admin email address" },
+        "role": { "type": "string", "enum": ["admin", "superadmin"], "description": "Admin privilege level" },
+        "createdAt": { "type": "string", "maxLength": 128, "description": "Timestamp created" }
+      },
+      "required": ["email", "role"]
+    }
+  },
+  "firestore": {
+    "/mis_dataset/{datasetId}": {
+      "schema": "DatasetMeta",
+      "description": "Central MIS dataset metadata (e.g. current)"
+    },
+    "/mis_dataset_chunks/{chunkId}": {
+      "schema": "DatasetChunk",
+      "description": "Data chunks storing row batches of the central MIS dataset"
+    },
+    "/admins/{adminId}": {
+      "schema": "AdminUser",
+      "description": "System administrator user registry"
+    }
+  }
+}
